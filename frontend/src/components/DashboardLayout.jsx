@@ -9,29 +9,13 @@ const ROLE_LABEL = {
   dinas_pertanian: "Dinas Pertanian",
 };
 
-// Menu ditentukan per-role supaya orang cuma lihat fitur yang relevan buat dia.
-function getMenuForRole(role) {
-  const base = [{ to: "/dashboard", label: "Ringkasan", end: true }];
-
-  if (role === "petani") {
-    return [
-      ...base,
-      { to: "/dashboard/kebun", label: "Kebun Saya" },
-      { to: "/dashboard/batches", label: "Batch Panen" },
-    ];
-  }
-  if (role === "pengepul") {
-    return [...base, { to: "/dashboard/batches", label: "Batch Panen" }];
-  }
-  if (role === "dinas_pertanian") {
-    return [
-      ...base,
-      { to: "/dashboard/batches", label: "Batch Panen" },
-      { to: "/dashboard/reports", label: "Laporan" },
-    ];
-  }
-  // eksportir, pabrik
-  return [...base, { to: "/dashboard/batches", label: "Batch Panen" }];
+function getMenu() {
+  return [
+    { to: "/dashboard", label: "Ringkasan", end: true },
+    { to: "/dashboard/kebun", label: "Kebun & Petani" },
+    { to: "/dashboard/batches", label: "Batch Panen" },
+    { to: "/dashboard/reports", label: "Laporan" },
+  ];
 }
 
 export default function DashboardLayout() {

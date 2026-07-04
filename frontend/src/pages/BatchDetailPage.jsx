@@ -14,7 +14,6 @@ const GRADE_COLORS = {
 export default function BatchDetailPage() {
   const { batchId } = useParams();
   const { user } = useAuth();
-  const canScan = user?.role === "petani" || user?.role === "pengepul";
 
   const [batch, setBatch] = useState(null);
   const [results, setResults] = useState([]);

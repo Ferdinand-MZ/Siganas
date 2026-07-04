@@ -5,7 +5,7 @@ from app.api.deps import get_db, get_current_user
 from app.core.config import settings
 from app.core.security import create_access_token, hash_password, verify_password
 from app.models.user import User
-from app.schemas.user_schema import LoginRequest, TokenResponse, UserCreate, UserResponse
+from app.schemas.user_schema import LoginRequest, TokenResponse, UserResponse
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -37,31 +37,31 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
     )
 
 
-@router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
-def register(payload: UserCreate, db: Session = Depends(get_db)):
-    """
-    Registrasi pengguna baru.
-    Username harus unik.
-    """
-    existing = db.query(User).filter(User.username == payload.username).first()
-    if existing:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail=f"Username '{payload.username}' sudah digunakan.",
-        )
+# @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+# def register(payload: UserCreate, db: Session = Depends(get_db)):
+#     """
+#     Registrasi pengguna baru.
+#     Username harus unik.
+#     """
+#     existing = db.query(User).filter(User.username == payload.username).first()
+#     if existing:
+#         raise HTTPException(
+#             status_code=status.HTTP_409_CONFLICT,
+#             detail=f"Username '{payload.username}' sudah digunakan.",
+#         )
 
-    new_user = User(
-        username=payload.username,
-        password_hash=hash_password(payload.password),
-        nama_lengkap=payload.nama_lengkap,
-        no_hp=payload.no_hp,
-        role=payload.role,
-    )
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
+#     new_user = User(
+#         username=payload.username,
+#         password_hash=hash_password(payload.password),
+#         nama_lengkap=payload.nama_lengkap,
+#         no_hp=payload.no_hp,
+#         role=payload.role,
+#     )
+#     db.add(new_user)
+#     db.commit()
+#     db.refresh(new_user)
 
-    return new_user
+#     return new_user
 
 
 @router.get("/me", response_model=UserResponse)

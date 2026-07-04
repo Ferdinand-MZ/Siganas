@@ -37,7 +37,7 @@ def _generate_kode_qr(kode_batch: str) -> str:
 def create_batch(
     payload: BatchCreate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_roles(RoleEnum.petani, RoleEnum.pengepul)),
+    current_user: User = Depends(require_roles(RoleEnum.dinas_pertanian)),
 ):
     """
     Buat batch panen baru.
@@ -48,8 +48,6 @@ def create_batch(
     if not kebun:
         raise HTTPException(status_code=404, detail="Kebun tidak ditemukan.")
 
-    if current_user.role == RoleEnum.petani and kebun.petani_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Kebun ini bukan milik Anda.")
 
     # Buat kode batch yang unik
     while True:
@@ -89,10 +87,6 @@ def list_batches(
     """
     query = db.query(BatchPanen)
 
-    if current_user.role == RoleEnum.petani:
-        # Join ke kebun untuk filter by petani_id
-        query = query.join(Kebun).filter(Kebun.petani_id == current_user.id)
-
     return query.order_by(BatchPanen.created_at.desc()).all()
 
 
@@ -114,7 +108,7 @@ def update_batch_status(
     batch_id: int,
     payload: BatchUpdateStatus,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_roles(RoleEnum.pengepul, RoleEnum.dinas_pertanian)),
+    current_user: User = Depends(require_roles(RoleEnum.dinas_pertanian)),
 ):
     """Update status distribusi batch. Hanya pengepul dan dinas pertanian."""
     batch = db.query(BatchPanen).filter(BatchPanen.id == batch_id).first()

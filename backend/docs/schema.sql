@@ -186,3 +186,8 @@ INSERT INTO users (username, password_hash, nama_lengkap, no_hp, role) VALUES
 ('dinas_admin', '$2b$12$Vj4qezD8baGOXaTQFTmt6.ARWSg/tEu1bDhfo0RZq80LBI57feksW', 'Admin Dinas Pertanian Subang', '081234567890', 'dinas_pertanian'),
 ('petani_demo', '$2b$12$n7e/fFc3TbmcJktUxF.pMeYlSJMUrdg/JN5nFXtjZQbdnYKWkQU2O', 'Petani Demo Jalancagak', '081234567891', 'petani'),
 ('pengepul_demo', '$2b$12$kNVRB5fryETWBzvDb0xAtuyG9naYiDKiwK1urnBtq3M./nbqaQwvK', 'Pengepul Demo Subang', '081234567892', 'pengepul');
+
+-- Tambahan petani untuk 3 lokasi sesuai proposal (password sementara: petani123, hash sama seperti petani_demo)
+INSERT INTO users (username, password_hash, nama_lengkap, no_hp, role) VALUES
+('petani_cijambe', '$2b$12$n7e/fFc3TbmcJktUxF.pMeYlSJMUrdg/JN5nFXtjZQbdnYKWkQU2O', 'Petani Demo Cijambe', '081234567893', 'petani'),
+('petani_cirangkong', '$2b$12$n7e/fFc3TbmcJktUxF.pMeYlSJMUrdg/JN5nFXtjZQbdnYKWkQU2O', 'Petani Demo Cirangkong', '081234567894', 'petani');

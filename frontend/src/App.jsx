@@ -19,7 +19,6 @@ export default function App() {
         <Routes>
           {/* Auth */}
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
 
           {/* Publik: dibuka dari scan QR code kemasan, tanpa login */}
           <Route path="/public/trace/:kodeBatch" element={<PublicTracePage />} />

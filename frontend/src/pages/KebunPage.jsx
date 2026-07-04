@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { listKebun, createKebun } from "../api/kebun";
+import { listUsers } from "../api/users";
 
 const initialForm = {
   nama_kebun: "",
@@ -11,10 +12,16 @@ const initialForm = {
   latitude: "",
   longitude: "",
   luas_lahan_hektar: "",
+  petani_id: "",
+  nama_kebun: "",
 };
 
 export default function KebunPage() {
   const [kebunList, setKebunList] = useState([]);
+  const [petaniList, setPetaniList] = useState([]);
+  useEffect(() => {
+    listUsers({ role: "petani" }).then(setPetaniList).catch(() => {});
+  }, []);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState(initialForm);
   const [error, setError] = useState("");
@@ -40,6 +47,7 @@ export default function KebunPage() {
     try {
       await createKebun({
         ...form,
+        petani_id: parseInt(form.petani_id, 10),
         latitude: parseFloat(form.latitude),
         longitude: parseFloat(form.longitude),
         luas_lahan_hektar: form.luas_lahan_hektar ? parseFloat(form.luas_lahan_hektar) : null,
@@ -79,6 +87,20 @@ export default function KebunPage() {
           onSubmit={handleSubmit}
           className="bg-white rounded-xl border border-slate-100 p-5 shadow-sm mb-6 grid grid-cols-2 gap-4"
         >
+          <div>
+          <label className="block text-sm font-semibold text-slate-800 mb-1.5">Petani Pemilik</label>
+          <select
+            required
+            value={form.petani_id}
+            onChange={(e) => update("petani_id", e.target.value)}
+            className="w-full rounded-lg bg-blue-50/60 border border-blue-100 px-4 py-2.5 text-slate-800"
+          >
+            <option value="">Pilih petani...</option>
+            {petaniList.map((p) => (
+              <option key={p.id} value={p.id}>{p.nama_lengkap} ({p.username})</option>
+            ))}
+          </select>
+        </div>
           <TextField label="Nama Kebun" value={form.nama_kebun} onChange={(v) => update("nama_kebun", v)} required />
           <TextField label="Kecamatan" value={form.kecamatan} onChange={(v) => update("kecamatan", v)} placeholder="Jalancagak" />
           <TextField label="Varietas Nanas" value={form.varietas_nanas} onChange={(v) => update("varietas_nanas", v)} />

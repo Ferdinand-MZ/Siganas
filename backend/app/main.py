@@ -14,6 +14,7 @@ from app.core.config import settings
 from app.middleware.error_handler import register_error_handlers
 from app.api.v1 import (
     auth_router,
+    user_router,
     batch_router,
     kebun_router,
     public_router,
@@ -80,6 +81,7 @@ app.include_router(batch_router.router,  prefix=API_PREFIX)
 app.include_router(yolo_router.router,   prefix=API_PREFIX)
 app.include_router(kebun_router.router,  prefix=API_PREFIX)
 app.include_router(report_router.router, prefix=API_PREFIX)
+app.include_router(user_router.router,   prefix=API_PREFIX)
 
 # Public traceability TIDAK diberi /api/v1 prefix dan TIDAK butuh login,
 # supaya URL-nya persis sama dengan yang di-encode di dalam QR code

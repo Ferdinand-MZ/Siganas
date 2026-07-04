@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field
 
 
 class KebunCreate(BaseModel):
+    petani_id:              int = Field(..., examples=[2], description="ID user dengan role petani, pemilik kebun ini.")
     nama_kebun:             str = Field(..., max_length=100, examples=["Kebun Budi Blok A"])
     kecamatan:              Optional[str] = Field(None, max_length=50, examples=["Jalancagak"])
     varietas_nanas:         Optional[str] = Field("Simadu", max_length=50)

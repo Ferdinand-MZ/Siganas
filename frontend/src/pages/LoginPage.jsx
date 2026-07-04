@@ -118,12 +118,6 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className="text-center text-sm text-slate-500 mt-5">
-          Belum memiliki akun?{" "}
-          <Link to="/register" className="font-semibold text-siganas-green hover:underline">
-            Daftar Sekarang
-          </Link>
-        </p>
       </div>
 
       <p className="text-center text-xs text-slate-400 mt-8">

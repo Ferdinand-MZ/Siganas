@@ -5,7 +5,6 @@ import { listBatches } from "../api/batches";
 
 export default function DashboardHome() {
   const { user } = useAuth();
-  const isDinas = user?.role === "dinas_pertanian";
 
   return (
     <div>
@@ -16,7 +15,7 @@ export default function DashboardHome() {
         Ringkasan aktivitas grading nanas Anda hari ini.
       </p>
 
-      {isDinas ? <DinasSummary /> : <UserSummary />}
+      <DinasSummary />
     </div>
   );
 }

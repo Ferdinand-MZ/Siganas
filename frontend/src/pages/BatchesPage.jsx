@@ -8,7 +8,6 @@ const GRADE_BADGE = "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs
 
 export default function BatchesPage() {
   const { user } = useAuth();
-  const canCreate = user?.role === "petani" || user?.role === "pengepul";
 
   const [batches, setBatches] = useState([]);
   const [kebunList, setKebunList] = useState([]);

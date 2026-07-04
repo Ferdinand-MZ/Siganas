@@ -13,14 +13,14 @@ router = APIRouter(prefix="/kebun", tags=["Kebun"])
 def create_kebun(
     payload: KebunCreate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_roles(RoleEnum.petani)),
+    current_user: User = Depends(require_roles(RoleEnum.dinas_pertanian)),
 ):
     """
     Daftarkan kebun baru milik petani yang sedang login.
     Wajib ada sebelum petani bisa membuat batch panen (lihat batch_router.create_batch).
     """
     kebun = Kebun(
-        petani_id=current_user.id,
+        petani_id=payload.petani_id,
         nama_kebun=payload.nama_kebun,
         kecamatan=payload.kecamatan,
         varietas_nanas=payload.varietas_nanas,
@@ -48,9 +48,6 @@ def list_kebun(
     """
     query = db.query(Kebun).filter(Kebun.is_active == True)
 
-    if current_user.role == RoleEnum.petani:
-        query = query.filter(Kebun.petani_id == current_user.id)
-
     return query.order_by(Kebun.created_at.desc()).all()
 
 
@@ -65,9 +62,6 @@ def get_kebun(
     if not kebun:
         raise HTTPException(status_code=404, detail="Kebun tidak ditemukan.")
 
-    if current_user.role == RoleEnum.petani and kebun.petani_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Kebun ini bukan milik Anda.")
-
     return kebun
 
 
@@ -76,15 +70,12 @@ def update_kebun(
     kebun_id: int,
     payload: KebunUpdate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_roles(RoleEnum.petani)),
+    current_user: User = Depends(require_roles(RoleEnum.dinas_pertanian)),
 ):
     """Perbarui data kebun. Hanya pemilik kebun (petani) yang boleh mengubah."""
     kebun = db.query(Kebun).filter(Kebun.id == kebun_id).first()
     if not kebun:
         raise HTTPException(status_code=404, detail="Kebun tidak ditemukan.")
-
-    if kebun.petani_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Kebun ini bukan milik Anda.")
 
     update_data = payload.model_dump(exclude_unset=True)
     for field, value in update_data.items():
@@ -99,7 +90,7 @@ def update_kebun(
 def deactivate_kebun(
     kebun_id: int,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_roles(RoleEnum.petani)),
+    current_user: User = Depends(require_roles(RoleEnum.dinas_pertanian)),
 ):
     """
     Nonaktifkan kebun (soft delete, bukan hapus permanen — supaya riwayat
@@ -108,9 +99,6 @@ def deactivate_kebun(
     kebun = db.query(Kebun).filter(Kebun.id == kebun_id).first()
     if not kebun:
         raise HTTPException(status_code=404, detail="Kebun tidak ditemukan.")
-
-    if kebun.petani_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Kebun ini bukan milik Anda.")
 
     kebun.is_active = False
     db.commit()

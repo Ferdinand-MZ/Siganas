@@ -52,7 +52,7 @@ async def scan_pineapple(
     input_brix_manual: Optional[float] = Form(None, description="Nilai Brix dari refraktometer (opsional)"),
     input_berat_manual_kg: Optional[float] = Form(None, description="Berat aktual dari timbangan kg (opsional)"),
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_roles(RoleEnum.petani, RoleEnum.pengepul)),
+    current_user: User = Depends(require_roles(RoleEnum.dinas_pertanian)),
 ):
     """
     Upload foto nanas dan jalankan grading otomatis.
